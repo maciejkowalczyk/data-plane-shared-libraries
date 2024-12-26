@@ -12,29 +12,100 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@io_bazel_rules_docker//container:container.bzl", "container_pull")
+load("@rules_oci//oci:pull.bzl", "oci_pull")
 
 def container_deps():
     images = {
-        # Distroless image for running Java
-        "runtime-java": {
+        "runtime-debian-debug-nonroot": {
             "arch_hashes": {
-                # debug-nonroot 2023-02-15
-                "amd64": "dca8c4ccea3797aa8df1cec14b7401b8b3868392ac2cd06ab2ca311d52ae7b98",
-                "arm64": "5e2475b1be5b81e9dc2527d71d4eff06cb192dff61c926e6ab10333f63ad308e",
+                # cc-debian11:debug-nonroot
+                "amd64": "72b9108b17a4ef0398998d45cbc14af2f3270af374fc2aa2c74823c6c7054fac",
+                "arm64": "623676598d55f93ff93ea3b9d95f3cb5a379eca66dfcf9b2734f2cc3e5f34666",
             },
             "registry": "gcr.io",
-            "repository": "distroless/java11-debian11",
+            "repository": "distroless/cc-debian11",
+        },
+        "runtime-debian-debug-root": {
+            # debug build so we can use 'sh'. Root, for gcp coordinators
+            # auth to work
+            # cc-debian11:debug
+            "arch_hashes": {
+                "amd64": "d5a2169bc2282598f0cf886a3d301269d0ee5bf7f7392184198dd41d36b70548",
+                "arm64": "6449313a9a80b2758f505c81462c492da87f76954d319f2adb55401177798cce",
+            },
+            "registry": "gcr.io",
+            "repository": "distroless/cc-debian11",
+        },
+        "runtime-debian-nondebug-nonroot": {
+            "arch_hashes": {
+                # cc-debian11:nonroot
+                # This image contains a minimal Linux, glibc runtime for "mostly-statically compiled" languages like Rust and D.
+                # https://github.com/GoogleContainerTools/distroless/blob/main/cc/README.md
+                "amd64": "5a9e854bab8498a61a66b2cfa4e76e009111d09cb23a353aaa8d926e29a653d9",
+                "arm64": "3122cd55375a0a9f32e56a18ccd07572aeed5682421432701a03c335ab79c650",
+            },
+            "registry": "gcr.io",
+            "repository": "distroless/cc-debian11",
+        },
+        "runtime-debian-nondebug-root": {
+            "arch_hashes": {
+                # cc-debian11:latest
+                "amd64": "72f2f861fdc130b1b083f3f055bbe84b73eec8c8c48f16a435194b41feedc674",
+                "arm64": "74bbfb32c5341d7abc6de0379ffe330a9aec2819c5145c4c71917975c93b83e5",
+            },
+            "registry": "gcr.io",
+            "repository": "distroless/cc-debian11",
+        },
+        # Non-distroless; only for debugging purposes
+        "runtime-ubuntu-fulldist-debug-root": {
+            # Ubuntu 20.04 ubuntu:focal-20240530
+            "arch_hashes": {
+                "amd64": "d86db849e59626d94f768c679aba441163c996caf7a3426f44924d0239ffe03f",
+                "arm64": "6edb9576e2a2080a42e4e0e9a6bc0bd91a2bf06375f9832d400bf33841d35ece",
+            },
+            "registry": "docker.io",
+            "repository": "library/ubuntu",
         },
     }
 
     [
-        container_pull(
-            name = img_name + "-" + arch,
-            digest = "sha256:" + hash,
-            registry = image["registry"],
-            repository = image["repository"],
+        oci_pull(
+            name = "{}-{}".format(img_name, arch),
+            digest = "sha256:{}".format(hash),
+            image = "{}/{}".format(image["registry"], image["repository"]),
         )
         for img_name, image in images.items()
         for arch, hash in image["arch_hashes"].items()
     ]
+
+DISTROLESS_USERS = [
+    struct(
+        flavor = "nonroot",
+        uid = 65532,
+        user = "nonroot",
+        gid = 65532,
+        group = "nonroot",
+    ),
+    struct(
+        flavor = "root",
+        uid = 0,
+        user = "root",
+        gid = 0,
+        group = "root",
+    ),
+]
+
+def get_user(user = "nonroot"):
+    """
+    Extracts a struct with details from DISTROLESS_USERS based on the given user.
+
+    Args:
+      user: The user to search for (e.g., "root" or "nonroot").
+
+    Returns:
+      The struct with the matching user, or None if no match is found.
+    """
+    for entry in DISTROLESS_USERS:
+        if entry.user == user:
+            return entry
+    return None

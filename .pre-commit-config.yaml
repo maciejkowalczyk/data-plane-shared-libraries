@@ -18,25 +18,30 @@ exclude: (?x)^(
   bazel-(bin|out|testlogs|workspace)/.*|
   .bazel_output/.*|
   builders/.*|
-  third_party/.*\.patch|
-  version.txt
+  (third_party|src)/.*\.patch|
+  version.txt|
+  docs/cpio/protobuf/.*\.md
   )$
 
 fail_fast: true
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.4.0
+  rev: v4.6.0
   hooks:
   - id: end-of-file-fixer
   - id: fix-byte-order-marker
   - id: mixed-line-ending
   - id: trailing-whitespace
+    exclude: (?x)^(
+      build_defs/.*\.patch
+      )$
   - id: check-case-conflict
   - id: check-merge-conflict
   - id: check-yaml
   - id: check-json
   - id: check-symlinks
   - id: check-added-large-files
+    exclude: ^src/\.*/sort_list_\.*.cc$
   - id: check-vcs-permalinks
   - id: check-executables-have-shebangs
   - id: detect-private-key
@@ -45,22 +50,25 @@ repos:
 - repo: https://github.com/jumanjihouse/pre-commit-hooks
   rev: 3.0.0
   hooks:
-  - id: git-check
   - id: script-must-not-have-extension
+    exclude: ^(src/.*\.sh)$
   - id: script-must-have-extension
   - id: require-ascii
+    exclude: ^(src/roma/byob/utility/file_reader_test\.cc)$
   - id: shellcheck
-    files: ^$
+    exclude: (?x)^(
+      build_defs/aws/.*|
+      .*experimental/.*|
+      .*internal/.*
+      )$
 
-- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.9.0
+- repo: https://github.com/bufbuild/buf
+  rev: v1.41.0
   hooks:
-  - id: pretty-format-java
-    name: Google Java Formatter
-    args: [--autofix]
+  - id: buf-format
 
 - repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v16.0.6
+  rev: v18.1.8
   hooks:
   - id: clang-format
     types_or:
@@ -91,19 +99,41 @@ repos:
     types_or:
     - text
 
+  - id: terraform-fmt
+    name: terraform fmt
+    description: Run terraform via docker to format Terraform files
+    language: script
+    pass_filenames: false
+    entry: builders/tools/terraform fmt -write=true -recursive .
+    types_or:
+    - terraform
+
 - repo: https://github.com/pre-commit/mirrors-prettier
-  rev: v3.0.0
+  rev: v3.1.0
   hooks:
   - id: prettier
-    name: prettier markdown
+    name: prettier markdown, javascript and json
     types_or:
     - markdown
+    - javascript
+    - json
+    exclude: (?x)^(
+      .*-lock\.json
+      )$
 
 - repo: https://github.com/DavidAnson/markdownlint-cli2
-  rev: v0.8.1
+  rev: v0.7.1
   hooks:
   - id: markdownlint-cli2
     name: lint markdown
+
+- repo: https://github.com/tcort/markdown-link-check
+  rev: v3.12.2
+  hooks:
+    - id: markdown-link-check
+      args:
+      - -c
+      - .markdown-link-check.json
 
 - repo: local
   hooks:
@@ -132,4 +162,30 @@ repos:
     - c
     args:
     - --filter=-build/c++11,+build/c++17,-build/header_guard,-build/include_order,+build/include_what_you_use,-build/include_subdir,-readability/casting,-readability/todo,-runtime/references
+    - --exclude=src/aws/proxy/preload.h
+    - --exclude=src/aws/proxy/socks5_state.cc
     - --quiet
+
+- repo: https://github.com/tekwizely/pre-commit-golang
+  rev: v1.0.0-rc.1
+  hooks:
+  - id: go-fmt
+    name: go format
+
+- repo: https://github.com/psf/black
+  rev: 24.8.0
+  hooks:
+  - id: black
+    name: black python formatter
+
+- repo: https://github.com/pylint-dev/pylint
+  rev: v3.2.7
+  hooks:
+  - id: pylint
+    types:
+    - python
+    args:
+    - -rn
+    - -sn
+    - --rcfile=.pylintrc
+    - --fail-on=I

@@ -2,6 +2,504 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## 0.76.0 (2024-12-16)
+
+
+### Features
+
+* Remove support for Amazon Linux 2
+
+## 0.75.1 (2024-11-22)
+
+
+### Bug Fixes
+
+* Revert to ubuntu:20
+
+## 0.75.0 (2024-11-21)
+
+
+### Features
+
+* Add gVisor dependencies to build-debian image
+
+## 0.74.0 (2024-11-21)
+
+
+### Features
+
+* Add cbuild flag --one-time to create a new container
+* Print message when reusing a cbuild container
+
+## 0.73.0 (2024-10-31)
+
+
+### Features
+
+* Create .clang.bazelrc
+
+
+### Dependencies
+
+* **deps:** Upgrade clang to v18
+
+## 0.72.0 (2024-10-23)
+
+
+### Features
+
+* Update build-debian image to Ubuntu 22.04 LTS
+
+## 0.71.0 (2024-10-18)
+
+
+### Dependencies
+
+* **deps:** Pin AmazonLinux2023 Nitro CLI versions
+* **deps:** Update AmazonLinux base images to 2024-10-01
+* **deps:** Upgrade pre-commit and pylint
+
+## 0.70.0 (2024-10-10)
+
+
+### Features
+
+* add awk, crane and jq to build-* images for the oci_pull credential helper
+
+## 0.69.1 (2024-09-19)
+
+### Bug Fixes
+
+* Use digest to ensure deterministic environment for build system
+
+
+## 0.69.0 (2024-09-15)
+
+
+### Features
+
+* Pin build-debian ubuntu base image from 20.04 to focal-20240530
+
+## 0.68.1 (2024-08-21)
+
+### Bug Fixes
+
+* Fix load bazel_tools import for Python deps
+
+## 0.68.0 (2024-08-21)
+
+
+### Features
+
+* **deps:** Split python deps and registering toolchains
+* **deps:** Update rules_python to 0.35.0
+
+## 0.67.0 (2024-07-31)
+
+
+### Bug Fixes
+
+* Add EXTRA_CBUILD_ARGS to tools/bazel-* scripts
+
+
+### Dependencies
+
+* **deps:** Update buildozer to 6.1.1
+* **deps:** Upgrade amazonlinux2023 to 5.20240722.0
+
+## 0.66.1 (2024-06-24)
+
+
+### Bug Fixes
+
+* Add --compilation_mode=opt to build:profiler config
+
+## 0.66.0 (2024-06-20)
+
+
+### Features
+
+* Add cpu-profiler flags to cbuild
+* Add profiler config in .profiler.bazelrc
+
+## 0.65.1 (2024-06-04)
+
+
+### Bug Fixes
+
+* Support multiple etc files in a single image
+
+## 0.65.0 (2024-06-04)
+
+
+### Features
+
+* Add DOCKER_NETWORK env var for test-tools
+
+## 0.64.1 (2024-05-29)
+
+
+### Bug Fixes
+
+* Support container reuse when --cmd not specified
+* Use find to identify bazel symlinks
+
+## 0.64.0 (2024-05-27)
+
+
+### Features
+
+* Support cmd-profiler mode with/without --cmd
+
+
+### Bug Fixes
+
+* cbuild should find container with exact name match
+* Ensure normalize-bazel-symlinks is in the workspace dir
+
+
+### Dependencies
+
+* **deps:** Upgrade clang-format pre-commit hook
+
+## 0.63.0 (2024-05-26)
+
+
+### Features
+
+* Support cmd-profiler mode with/without --cmd
+
+
+### Bug Fixes
+
+* Ensure normalize-bazel-symlinks is in the workspace dir
+
+
+### Dependencies
+
+* **deps:** Upgrade clang-format pre-commit hook
+
+## 0.62.0 (2024-05-10)
+
+
+### Features
+
+* Add --dir flag to normalize-dist
+
+## 0.61.1 (2024-05-10)
+
+
+### Bug Fixes
+
+* Add docker flags to container name
+* Set 8h ttl for long-running build container
+
+## 0.61.0 (2024-05-08)
+
+
+### Features
+
+* Add cbuild support for container reuse
+
+## 0.60.0 (2024-05-07)
+
+
+### Dependencies
+
+* **deps:** Upgrade coverage-tools to ubuntu 24.04
+* **deps:** Upgrade golang to 1.22.2
+
+## 0.59.0 (2024-05-02)
+
+
+### Bug Fixes
+
+* **deps:** Update pre-commit hooks
+
+
+### Dependencies
+
+* **deps:** Upgrade alpine base image
+* **deps:** Upgrade base images for Amazon Linux
+* **deps:** Upgrade grpcurl to 1.9.1
+* **deps:** Upgrade presubmit to ubuntu 24.04
+
+## 0.58.0 (2024-04-26)
+
+
+### Features
+
+* add missing AWS env variable for CodeBuild
+
+## 0.57.1 (2024-03-28)
+
+
+### Bug Fixes
+
+* Upgrade OpenSSF scorecard GitHub Action
+
+## 0.57.0 (2024-03-10)
+
+
+### Features
+
+* Add a generic pylintrc
+* Add clang-tidy to build-debian
+
+## 0.56.0 (2024-02-29)
+
+
+### Features
+
+* Add pylint to presubmit
+
+
+### Bug Fixes
+
+* Clean bazel build and mod caches
+* Pin okigan/awscurl to v0.29
+
+## 0.55.2 (2024-02-23)
+
+
+### Bug Fixes
+
+* Add gmock to .clang-format
+
+## 0.55.1 (2024-02-22)
+
+
+### Bug Fixes
+
+* Do not invoke normalize-bazel-symlinks for cbuild --cmd
+
+## 0.55.0 (2024-02-22)
+
+
+### Bug Fixes
+
+* Normalize bazel symlinks to a resolved path
+* Pass the correct path for normalize-bazel-symlinks
+
+## 0.54.0 (2024-02-09)
+
+
+### Features
+
+* Set cbuild workdir to pwd relative to root workspace
+
+## 0.53.0 (2024-01-25)
+
+
+### Features
+
+* Add support to collect-coverage tool for custom lcov report
+
+
+### Bug Fixes
+
+* Improve --cmd-profiler support
+
+## 0.52.0 (2023-12-02)
+
+
+### Features
+
+* add python3.9 dev to bazel-debian
+
+## 0.51.0 (2023-11-30)
+
+
+### Bug Fixes
+
+* Clean go build cache at the end of image build script
+
+
+### Dependencies
+
+* **deps:** Upgrade bazelisk to 1.19.0
+
+## 0.50.0 (2023-11-06)
+
+
+### Features
+
+* Add openssh-client to build-debian image
+
+## 0.49.1 (2023-10-30)
+
+
+### Bug Fixes
+
+* Add tools/wrk2 wrapper script
+
+## 0.49.0 (2023-10-27)
+
+
+### Features
+
+* Add wrk2 to test-tools image
+* Extend normalize-bazel-symlink to normalize within containers
+
+
+### Dependencies
+
+* **deps:** Update versions in test-tools image
+
+## 0.48.0 (2023-10-11)
+
+
+### Features
+
+* Add tools/bazel-amazonlinux2023
+
+
+### Bug Fixes
+
+* Add lldb symlink
+
+## 0.47.0 (2023-10-05)
+
+
+### Features
+
+* Add --cmd-profiler flag to tools/cbuild
+* Add google-pprof to coverage-tools image
+* Add libprofiler.so to build-debian image
+
+
+### Bug Fixes
+
+* Indicate default image in help text
+
+## 0.46.1 (2023-10-04)
+
+
+### Bug Fixes
+
+* cbuild exits normally even if bazel symlinks aren't normalized
+* Revert to clang 15.x
+* Use bash when normalize-dist runs inside docker
+* Use DOCKER_NETWORK if already set
+
+## 0.46.0 (2023-09-22)
+
+
+### Bug Fixes
+
+* Hide normalize-bazel-symlinks in cbuild
+
+
+### Dependencies
+
+* **deps:** Update amazonlinux images to Aug 2023
+* **deps:** Upgrade clang to v16 in build-debian
+
+## 0.45.0 (2023-09-19)
+
+
+### Features
+
+* Invoke normalize-bazel-symlinks at cbuild exit
+
+## 0.44.0 (2023-09-11)
+
+
+### Features
+
+* Add coverage bazel config and collect-coverage tool
+
+## 0.43.0 (2023-08-15)
+
+
+### Features
+
+* Allow terraform version to be specified
+
+
+### Bug Fixes
+
+* Move feat(deps) earlier for precedence over feat
+
+## 0.42.1 (2023-08-14)
+
+
+### Bug Fixes
+
+* Revert override of /usr/bin/python links in build-amazonlinux2
+
+## 0.42.0 (2023-08-07)
+
+
+### Features
+
+* Add amazonlinux2 support to convert-docker-to-nitro
+* Add bsdmainutils for hexdump
+* Add build-amazonlinux2023 image
+* Add support for amazonlinux2023 in builder.sh
+* Configure python3.9 for python/python3 links
+* Remove jdk from build-amazonlinux2 image
+
+### Dependencies
+
+* **deps:** Upgrade amazonlinux2 to 20230719
+
+
+### Bug Fixes
+
+* Empty bazel-* arg list not an error condition
+
+## 0.41.1 (2023-08-04)
+
+
+### Bug Fixes
+
+* Remove debug statement
+
+## 0.41.0 (2023-08-03)
+
+
+### Features
+
+* Create links for lld and ld.lld in build-debian
+
+## 0.40.0 (2023-08-03)
+
+
+### Features
+
+* Add Dependencies section for release notes
+* **deps:** Upgrade rules_python to 0.24.0
+* Ensure bazel-* scripts handle non-bazel args too
+
+## 0.39.0 (2023-08-02)
+
+
+### Features
+
+* Run bazel containers in seccomp=unconfined mode
+
+## 0.38.1 (2023-08-02)
+
+
+### Bug Fixes
+
+* Ensure python3.9 is found first in PATH
+
+## 0.38.0 (2023-07-28)
+
+
+### Features
+
+* Add cbuild flag --seccomp-unconfined
+
+## 0.37.0 (2023-07-27)
+
+
+### Features
+
+* Add patch tool to build-debian image
+
 ## 0.36.1 (2023-07-25)
 
 

@@ -1,12 +1,10 @@
 workspace(name = "google_privacysandbox_servers_common")
 
-load("//builders/bazel:deps.bzl", "python_deps")
+load("//builders/bazel:deps.bzl", "python_deps", "python_register_toolchains")
 
-python_deps("//builders/bazel")
+python_deps()
 
-load("@google_privacysandbox_servers_common//:java_deps.bzl", "java_dependencies")
-
-java_dependencies()
+python_register_toolchains("//builders/bazel")
 
 load("@google_privacysandbox_servers_common//third_party:cpp_deps.bzl", "cpp_dependencies")
 
@@ -36,18 +34,11 @@ load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
 
 rules_jvm_external_setup()
 
-load("@google_privacysandbox_servers_common//third_party:maven_deps.bzl", "maven_deps")
-
-maven_deps()
-
-load("@io_bazel_rules_docker//repositories:deps.bzl", docker_container_deps = "deps")
-
-docker_container_deps()
-
 load("@google_privacysandbox_servers_common//third_party:container_deps.bzl", "container_deps")
 
 container_deps()
 
-load("@io_bazel_rules_docker//java:image.bzl", java_image_repos = "repositories")
-
-java_image_repos()
+local_repository(
+    name = "google_privacysandbox_functionaltest_system",
+    path = "testing/functionaltest-system",
+)
